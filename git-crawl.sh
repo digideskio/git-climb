@@ -2,10 +2,10 @@
 
 function git-climb() {
   local -r pos="${1}"
-  local branch="${2}"
+  local up_to="${2}"
 
   if [ -z "${branch}" ]; then
-    branch="master"
+    up_to="master"
   fi
 
   if [ "${pos}" = "start" ]; then
@@ -15,10 +15,12 @@ function git-climb() {
 
   if [ "${pos}" = "next" ]; then
     local -r root=$(git rev-list --reverse HEAD | tail -1)
-    git checkout $(git rev-list --reverse --ancestry-path "${root}".."${branch}" | head -1)
+    git checkout $(git rev-list --reverse --ancestry-path "${root}".."${up_to}" | head -1)
     return 0;
   fi
 
-  >&2 echo "git-start [start|next]"
+  >&2 echo "Examples:"
+  >&2 echo "  git-start start"
+  >&2 echo "  git-start next [sha or branch-name]"
   return 1;
 }
